@@ -1,60 +1,58 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 
-import RPi.GPIO as GPIO 
+import RPi.GPIO as GPIO
 
 class L298N(object):
-  def __init__(self, pins, pwapins, frequency):
-    self.pin_pwm_a = pwapins[0]
-    self.pin_pwm_b = pwapins[1]
-    self.pin_input_1 = pins[0]
-    self.pin_input_2 = pins[1]
-    self.pin_input_3 = pins[2]
-    self.pin_input_4 = pins[3]
-    self.frequency_a = frequency[0]
-    self.frequency_b = frequency[1]
-  
-  def init_gpio(self):
-    GPIO.setup(self.pin_input_1, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(self.pin_input_2, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(self.pin_input_3, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(self.pin_input_4, GPIO.OUT, initial=GPIO.LOW)
-  
-  def init_pwm(self):
-    GPIO.setup(self.pin_pwm_a, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(self.pin_pwm_b, GPIO.OUT, initial=GPIO.LOW)
-    self.pwm_a = GPIO.PWM(self.pin_pwm_a, self.frequency_a)
-    self.pwm_a.start(0)
-    self.pwm_b = GPIO.PWM(self.pin_pwm_b, self.frequency_b)
-    self.pwm_b.start(0)
-  
-  def out_a_start_up(self, dutycycle):
-    GPIO.output(self.pin_input_1, GPIO.LOW)
-    GPIO.output(self.pin_input_2, GPIO.HIGH)
+  def __init__(self,config):
+    if 'ch_a' in config:
+      self.ch_a_input = config['ch_a']['pins']
+      self.setup_gpio(self.ch_a_input,[GPIO.LOW, GPIO.LOW])
+
+      if 'pwm' in config['ch_a']:
+        pwm = config['ch_a']['pwm']
+        GPIO.setup(pwm['pin'], GPIO.OUT, initial=False)
+        self.pwm_a = GPIO.PWM(pwm['pin'],pwm['frq'])
+        self.pwm_a.start(0)
+
+    if 'ch_b' in config:
+      self.ch_b_input = config['ch_b']['pins']
+      self.setup_gpio(self.ch_b_input,[GPIO.LOW, GPIO.LOW])
+
+      if 'pwm' in config['ch_b']:
+        pwm = config['ch_b']['pwm']
+        GPIO.setup(pwm['pin'], GPIO.OUT, initial=GPIO.LOW)
+        self.pwm_b = GPIO.PWM(pwm['pin'],pwm['frq'])
+        self.pwm_b.start(0)
+
+  def ch_a_start_up(self, dutycycle):
+    self.set_gpio(self.ch_a_input,[GPIO.LOW, GPIO.HIGH])
     self.pwm_a.ChangeDutyCycle(dutycycle)
-  
-  def out_a_reverse(self, dutycycle):
-    GPIO.output(self.pin_input_1, GPIO.HIGH)
-    GPIO.output(self.pin_input_2, GPIO.LOW)
+
+  def ch_a_reverse(self, dutycycle):
+    self.set_gpio(self.ch_a_input,[GPIO.HIGH, GPIO.LOW])
     self.pwm_a.ChangeDutyCycle(dutycycle)
-  
-  def out_b_start_up(self, dutycycle):
-    GPIO.output(self.pin_input_3, GPIO.LOW)
-    GPIO.output(self.pin_input_4, GPIO.HIGH)
+
+  def ch_b_start_up(self, dutycycle):
+    self.set_gpio(self.ch_b_input,[GPIO.LOW, GPIO.HIGH])
     self.pwm_b.ChangeDutyCycle(dutycycle)
-  
-  def out_b_reverse(self, dutycycle):
-    GPIO.output(self.pin_input_3, GPIO.HIGH)
-    GPIO.output(self.pin_input_4, GPIO.LOW)
+
+  def ch_b_reverse(self, dutycycle):
+    self.set_gpio(self.ch_b_input,[GPIO.HIGH, GPIO.LOW])
     self.pwm_b.ChangeDutyCycle(dutycycle)
-  
-  def out_a_stop(self):
-    GPIO.output(self.pin_input_1, GPIO.LOW)
-    GPIO.output(self.pin_input_2, GPIO.LOW)
+
+  def ch_a_stop(self):
+    self.set_gpio(self.ch_a_input,[GPIO.LOW, GPIO.LOW])
     self.pwm_a.ChangeDutyCycle(0)
-    
-  def out_b_stop(self):
-    GPIO.output(self.pin_input_3, GPIO.LOW)
-    GPIO.output(self.pin_input_4, GPIO.LOW)
+
+  def ch_b_stop(self):
+    self.set_gpio(self.ch_b_input,[GPIO.LOW, GPIO.LOW])
     self.pwm_b.ChangeDutyCycle(0)
-  
+
+  def set_gpio(self, pins, values):
+    for index,pin in enumerate(pins):
+      GPIO.output(pin, values[index])
+
+  def setup_gpio(self, pins, values):
+    for index,pin in enumerate(pins):
+      GPIO.setup(pin, GPIO.OUT, initial=GPIO.LOW)
