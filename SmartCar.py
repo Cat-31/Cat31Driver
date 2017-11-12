@@ -50,7 +50,7 @@ class SmartCar(object):
   def flash_light_on(self, dutycycle):
     self.l298n.ch_b_start_up(50)
 	
-  def flash_light_off(self, dutycycle):
+  def flash_light_off(self):
     self.l298n.ch_b_stop()
 
   def car_forward(self, dutycycle):
