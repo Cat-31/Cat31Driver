@@ -12,14 +12,13 @@ class SteeringEngine(object):
     self.move_to(self.current_angle)
 
   def move_to(self, angle):
-    step = (1 if angle >= self.current_angle else -1)
-    # print(2.5 + 10 * self.current_angle/180)
-    for i in range(self.current_angle, angle + step, step):
-      self.pwm.ChangeDutyCycle(2.5 + 10 * i / 180)
-      time.sleep(0.02)
-      # print(i)
-      # print(2.5 + 10 * i / 180)
-
+    duty_cycle = 2.5 + 10*angle/180
+	# 大角度转动 响应时间？
+    for i in range(0,5,1):
+        self.pwm.ChangeDutyCycle(duty_cycle) 
+        time.sleep(0.02)                      
+        self.pwm.ChangeDutyCycle(0)    
+        
     self.pwm.ChangeDutyCycle(0)
     self.current_angle = angle
 
