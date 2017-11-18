@@ -6,20 +6,20 @@
 <meta name="viewport" content="initial-scale=1.0" />
 <meta name="viewport" content="maximum-scale=1.0" />
 <meta name="viewport" content="user-scalable=0" />
-<title>Weekend-X Control</title>
+<title>Cat-31 Control</title>
 <script src="jquery-3.1.0.js"></script>
 <script>
         $(function () {
-            $('#up').click(function () {
-                $.ajax('/pi/control/up', {
+            $('#forward').click(function () {
+                $.ajax('/cat31/control/forward', {
                     type: 'get',
                     processData: false
                 });
             });
         });
         $(function () {
-            $('#down').click(function () {
-                $.ajax('/pi/control/down', {
+            $('#back').click(function () {
+                $.ajax('/cat31/control/back', {
                     type: 'get',
                     processData: false
                 });
@@ -27,7 +27,7 @@
         });
         $(function () {
             $('#left').click(function () {
-                $.ajax('/pi/control/left', {
+                $.ajax('/cat31/control/left', {
                     type: 'get',
                     processData: false
                 });
@@ -35,7 +35,7 @@
         });
         $(function () {
             $('#right').click(function () {
-                $.ajax('/pi/control/right', {
+                $.ajax('/cat31/control/right', {
                     type: 'get',
                     processData: false
                 });
@@ -43,46 +43,63 @@
         });
         $(function () {
             $('#stop').click(function () {
-                $.ajax('/pi/control/stop', {
+                $.ajax('/cat31/control/stop', {
                     type: 'get',
                     processData: false
                 });
             });
         });
         $(function () {
-            $('#cameraLeft').click(function () {
-                $.ajax('/pi/control/cameraLeft', {
+            $('#cameraturnleft').click(function () {
+                $.ajax('/cat31/control/cameraturnleft', {
                     type: 'get',
                     processData: false
                 });
             });
         });
         $(function () {
-            $('#cameraRight').click(function () {
-                $.ajax('/pi/control/cameraRight', {
+            $('#cameraturnright').click(function () {
+                $.ajax('/cat31/control/cameraturnright', {
                     type: 'get',
                     processData: false
                 });
             });
         });
-
-	function showVideo() {
-		$('#video').attr('src','http://' + window.location.host + ':8080/javascript_simple.html');
-	};
+        $(function () {
+            $('#flashon').click(function () {
+                $.ajax('/cat31/control/flashon', {
+                    type: 'get',
+                    processData: false
+                });
+            });
+        });        
+        $(function () {
+            $('#flashoff').click(function () {
+                $.ajax('/cat31/control/flashoff', {
+                    type: 'get',
+                    processData: false
+                });
+            });
+        });
+    function showVideo() {
+        $('#video').attr('src','http://' + window.location.host + ':8080/javascript_simple.html');
+    };
     </script>
 </head>
 <body onload="showVideo();">
-	<h1>Weekend-X Control</h1>
-	<iframe id='video' width='640' height='480' 
-		frameborder="no" border="0" marginwidth="0" 
-		marginheight="0" scrolling="no" allowtransparency="no"></iframe>
-	<br>
-	<button id="up" style="width:120px;height:80px">up</button>&nbsp;&nbsp;&nbsp;&nbsp;
-	<button id="down" style="width:120px;height:80px">down</button><br><br>
-	<button id="left" style="width:120px;height:80px">left</button>&nbsp;&nbsp;&nbsp;&nbsp;
-	<button id="right" style="width:120px;height:80px">right</button><br><br>
-	<button id="stop" style="width:260px;height:80px">stop</button><br><br>
-	<button id="cameraLeft" style="width:120px;height:80px">Camera Left</button>&nbsp;&nbsp;&nbsp;&nbsp;
-	<button id="cameraRight" style="width:120px;height:80px">Camera Right</button>
+    <h1>Cat-31 Control</h1>
+    <iframe id='video' width='640' height='480' 
+        frameborder="no" border="0" marginwidth="0" 
+        marginheight="0" scrolling="no" allowtransparency="no"></iframe>
+    <br>
+    <button id="forward" style="width:300px;height:80px;font-size:24px">Forward</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="back" style="width:300px;height:80px;font-size:24px">Back</button><br><br>
+    <button id="left" style="width:300px;height:80px;font-size:24px">Left</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="right" style="width:300px;height:80px;font-size:24px">Right</button><br><br>
+    <button id="stop" style="width:620px;height:80px;font-size:24px">Stop</button><br><br>
+    <button id="cameraturnleft" style="width:300px;height:80px;font-size:24px">Camera Left</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="cameraturnright" style="width:300px;height:80px;font-size:24px">Camera Right</button><br><br>
+    <button id="flashon" style="width:300px;height:80px;font-size:24px">Flash On</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="flashoff" style="width:300px;height:80px;font-size:24px">Flash Off</button><br><br>
 </body>
 </html>
