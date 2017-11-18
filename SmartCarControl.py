@@ -20,7 +20,7 @@ config  = {'green_led':{'pin':3, 'on':True},
                       'pins':[19,26],'pwm':{'pin':5,'frq':0.5}
                      }
                    },
-            'hcsr04':{'pins':{'T':23,'R':24}, 'interval':0.01, 'voice_speed':340}
+            'hcsr04':{'pins':{'T':23,'R':24}, 'interval':0.1, 'voice_speed':340}
           }
            
 car = smartcar.SmartCar(config)

@@ -47,6 +47,7 @@ class SmartCar(object):
     
   def init_l298n(self, config):
     self.l298n = l298n.L298N(config)
+    self.running = False
     
   def flash_light_on(self, dutycycle):
     self.l298n.ch_b_start_up(dutycycle)
@@ -55,13 +56,18 @@ class SmartCar(object):
     self.l298n.ch_b_stop()
 
   def car_forward(self, dutycycle):
-    self.l298n.ch_a_start_up(dutycycle)
+    if not self.running:
+      self.running = True
+      check_distance_thread = threading.Thread(target=self.check_distance, name='check distance thread') 
+      check_distance_thread.start()
+      self.l298n.ch_a_start_up(dutycycle)
     
   def car_back_off(self, dutycycle):
     self.l298n.ch_a_reverse(dutycycle)
 
   def car_stop(self):
     self.l298n.ch_a_stop()
+    self.running = False
 
   def set_distance_to_obstacle(self):
     self.ud_start = True
@@ -70,7 +76,6 @@ class SmartCar(object):
       if self.distance_to_obstacle < 0.2:
         self.set_yellow_led_on()
         self.set_green_led_off()
-        self.car_stop()
       else:
         self.set_yellow_led_off()
         self.set_green_led_on()
@@ -83,11 +88,16 @@ class SmartCar(object):
   def ud_start(self):
     ud_thread = threading.Thread(target=self.set_distance_to_obstacle, name='ultrasonic distance measurement') 
     ud_thread.start()
+
+  def check_distance(self):
+    while self.running:
+      if self.distance_to_obstacle < 0.2:
+        self.car_stop()
+        self.running = False
+      time.sleep(0.1) 
     
   def exit(self):
     self.ud_stop()
-
-
 
 
 
