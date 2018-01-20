@@ -8,8 +8,8 @@ from bottle import route, run, static_file, response
 GPIO.setmode(GPIO.BCM)
 atexit.register(GPIO.cleanup)
 
-config  = {'green_led':{'pin':3, 'on':True}, 
-           'yellow_led':{'pin':2, 'on':True}, 
+config  = {'green_led':{'pin':27, 'on':True}, 
+           'yellow_led':{'pin':22, 'on':True}, 
            'front_steering_engine':{'pin':20,'angle':90},
            'camera_steering_engine':{'pin':21,'angle':90},
            'l298n':{
