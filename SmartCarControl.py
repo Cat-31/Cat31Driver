@@ -88,6 +88,7 @@ def send_js(filename):
     response.content_type = 'script/javascript; charset=UTF-8'
     return static_file(filename, root='./static/')
 
+
 @route('/cat31/control/<action>')
 def car_control(action):
     control(action)
