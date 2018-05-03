@@ -2,8 +2,7 @@
 # encoding: utf-8
 
 import time
-import MAX7219 as max7219 
-
+import MAX7219 as max7219
 
 max7219 = max7219.MAX7219()
 
@@ -15,8 +14,7 @@ heart = [0x00, 0x70, 0x88, 0x84, 0x42, 0x84, 0x88, 0x70]
 max7219.show(heart)
 time.sleep(2)
 
-
-#网上搜到的一份字库 
+# 网上搜到的一份字库
 '''
 for i in chrset:
     max7219.show(i)

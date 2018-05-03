@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CC24</title>
+<link rel="stylesheet" href="static/jquery-ui.min.css">
+<script src="static/jquery-3.1.0.js"></script>
+<script src="static/jquery-ui.min.js"></script>
+
+<script>
+$(function() {
+
+    $("#left_slider").slider({
+        orientation: "vertical",
+        range: "min",
+        min: -100,
+        max: 100,
+        value: 0,
+        animate: true,
+        slide: function(event, ui) {
+            $.ajax('/cc24/control/setleft/'+ui.value, {
+                type: 'get',
+                processData: false,
+                error: function(e) {
+                    alert(e);
+                }
+            });
+        }
+    });
+
+    $("#right_slider").slider({
+            orientation: "vertical",
+            range: "min",
+            min: -100,
+            max: 100,
+            value: 0,
+            animate: true,
+            slide: function(event, ui) {
+                $.ajax('/cc24/control/setright/'+ui.value, {
+                    type: 'get',
+                    processData: false
+                });
+            }
+    });
+});
+
+
+</script>
+</head>
+<body>
+
+<div style="height:200px;width:100px;float:left;"></div>
+<div id="left_slider" style="height:200px;float:left;"></div>
+<div style="height:200px;width:100px;float:left;"></div>
+<div id="right_slider" style="height:200px;float:left;"></div>
+
+</body>
+</html>

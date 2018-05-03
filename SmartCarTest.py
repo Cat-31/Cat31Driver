@@ -7,22 +7,22 @@ from bottle import route, run, static_file, response
 from device import SteeringEngineDriver as sedriver, L298NDriver as l298n, HCSR04 as hcsr04, LED as led
 
 GPIO.setmode(GPIO.BCM)
-atexit.register(GPIO.cleanup) 
-config  = {'green_led':{'pin':3, 'on':True}, 
-           'yellow_led':{'pin':2, 'on':True}, 
-           'front_steering_engine':{'pin':20,'angle':90},
-           'camera_steering_engine':{'pin':21,'angle':90},
-           'l298n':{
-                     'ch_a': {
-                       'pins':[6,13],'pwm':{'pin':16,'frq':50}
-                     },
-                    'ch_b':{
-                      'pins':[19,26],'pwm':{'pin':5,'frq':0.5}
-                     }
-                   },
-            'hcsr04':{'pins':{'T':23,'R':24}, 'interval':0.01, 'voice_speed':340}
+atexit.register(GPIO.cleanup)
+config = {'green_led': {'pin': 3, 'on': True},
+          'yellow_led': {'pin': 2, 'on': True},
+          'front_steering_engine': {'pin': 20, 'angle': 90},
+          'camera_steering_engine': {'pin': 21, 'angle': 90},
+          'l298n': {
+              'ch_a': {
+                  'pins': [6, 13], 'pwm': {'pin': 16, 'frq': 50}
+              },
+              'ch_b': {
+                  'pins': [19, 26], 'pwm': {'pin': 5, 'frq': 0.5}
+              }
+          },
+          'hcsr04': {'pins': {'T': 23, 'R': 24}, 'interval': 0.01, 'voice_speed': 340}
           }
-           
+
 car = car.SmartCar(config)
 
 time.sleep(2)
@@ -60,5 +60,3 @@ print('distance %2f' % car.distance_to_obstacle)
 
 time.sleep(100)
 car.ud_stop()
-
-

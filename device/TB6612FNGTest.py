@@ -2,14 +2,14 @@
 # -*- coding:utf-8 -*-
 import RPi.GPIO as GPIO
 import time
-import L298NDriver as l298n
+import TB6612FNG as tb6612fng
 
 GPIO.setmode(GPIO.BCM)
-config = {'ch_a': {'pins': [6, 13], 'pwm': {'pin': 5, 'frq': 0.5}},
+config = {'stby': 20, 'ch_a': {'pins': [6, 13], 'pwm': {'pin': 5, 'frq': 1}},
           'ch_b': {'pins': [19, 26], 'pwm': {'pin': 21, 'frq': 1}}}
 print(config)
 
-motor = l298n.L298N(config)
+motor = tb6612fng.TB6612FNG(config)
 time.sleep(1)
 
 motor.ch_a_start_up(50)

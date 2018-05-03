@@ -2,65 +2,46 @@ import RPi.GPIO as GPIO
 import time
 import signal
 import atexit
-import SmartCar as smartcar
+import SmartCarCC24 as smartcar
 from bottle import route, run, static_file, response
 
 GPIO.setmode(GPIO.BCM)
 atexit.register(GPIO.cleanup)
 
-config = {'green_led': {'pin': 27, 'on': True},
-          'yellow_led': {'pin': 22, 'on': True},
-          'front_steering_engine': {'pin': 20, 'angle': 90},
-          'ud_steering_engine': {'pin': 21, 'angle': 90},
-          'l298n': {
+config = {'ud_steering_engine': {'pin': 21, 'angle': 90},
+          'tb6612fng': {
               'ch_a': {
                   'pins': [6, 13], 'pwm': {'pin': 16, 'frq': 90}
               },
               'ch_b': {
                   'pins': [19, 26], 'pwm': {'pin': 5, 'frq': 90}
-              }
+              },
+              'stby': 20
           },
           'hcsr04': {'pins': {'T': 23, 'R': 24}, 'interval': 0.1, 'voice_speed': 340}
           }
 
-car = smartcar.SmartCar(config)
-car.ud_start()
-atexit.register(car.exit)
+car = smartcar.SmartCarCC24(config)
+# car.ud_start()
+# atexit.register(car.exit)
 
-front_angle = config['front_steering_engine']['angle']
 ud_angle = config['ud_steering_engine']['angle']
 
 
-def forward():
-    print('forward')
+def set_left_speed(dc):
     global car
-    car.car_forward(30)
+    car.set_left_forward(dc) if dc >=0 else car.set_left_reverse(-dc)
 
 
-def back():
-    print('back')
+def set_right_speed(dc):
     global car
-    car.car_back_off(30)
+    car.set_right_forward(dc) if dc >= 0 else car.set_right_reverse(-dc)
 
 
 def stop():
     print('stop')
     global car
     car.car_stop()
-
-
-def turn_left():
-    global car, front_angle
-    front_angle = front_angle - 10
-    print('turn_left: %d' % front_angle)
-    car.direction_turn_to(front_angle)
-
-
-def turn_right():
-    global car, front_angle
-    front_angle = front_angle + 10
-    print('turn_right: %d' % front_angle)
-    car.direction_turn_to(front_angle)
 
 
 def ud_turn_left():
@@ -77,28 +58,31 @@ def ud_turn_right():
     car.camera_turn_to(ud_angle)
 
 
-@route('/cat31/<filename>')
+@route('/cc24/<filename>')
 def send_static(filename):
     response.content_type = 'text/html; charset=UTF-8'
     return static_file(filename, root='./')
 
 
-@route('/cat31/control/<action>')
-def car_control(action):
-    control(action)
+@route('/cc24/static/<filename>')
+def send_js(filename):
+    response.content_type = 'script/javascript; charset=UTF-8'
+    return static_file(filename, root='./static/')
 
 
-def control(action):
-    control = {
-        'forward': lambda: forward(),
-        'back': lambda: back(),
-        'left': lambda: turn_left(),
-        'right': lambda: turn_right(),
+@route('/cc24/control/<action>/<value>')
+def car_control(action, value):
+    control(action, int(value))
+
+
+def control(action, value):
+    return {
+        'setleft': lambda: set_left_speed(value),
+        'setright': lambda: set_right_speed(value),
         'stop': lambda: stop(),
         'udleft': lambda: ud_turn_left(),
         'udright': lambda: ud_turn_right()
-    }
-    return control[action]()
+    }[action]()
 
 
 run(host='0.0.0.0', port=80)

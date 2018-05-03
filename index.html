@@ -7,7 +7,7 @@
 <meta name="viewport" content="maximum-scale=1.0" />
 <meta name="viewport" content="user-scalable=0" />
 <title>Cat-31 Control</title>
-<script src="jquery-3.1.0.js"></script>
+<script src="static/jquery-3.1.0.js"></script>
 <script>
         $(function () {
             $('#forward').click(function () {
@@ -50,32 +50,16 @@
             });
         });
         $(function () {
-            $('#cameraturnleft').click(function () {
-                $.ajax('/cat31/control/cameraturnleft', {
+            $('#udleft').click(function () {
+                $.ajax('/cat31/control/udleft', {
                     type: 'get',
                     processData: false
                 });
             });
         });
         $(function () {
-            $('#cameraturnright').click(function () {
-                $.ajax('/cat31/control/cameraturnright', {
-                    type: 'get',
-                    processData: false
-                });
-            });
-        });
-        $(function () {
-            $('#flashon').click(function () {
-                $.ajax('/cat31/control/flashon', {
-                    type: 'get',
-                    processData: false
-                });
-            });
-        });        
-        $(function () {
-            $('#flashoff').click(function () {
-                $.ajax('/cat31/control/flashoff', {
+            $('#udright').click(function () {
+                $.ajax('/cat31/control/udright', {
                     type: 'get',
                     processData: false
                 });
@@ -97,9 +81,7 @@
     <button id="left" style="width:300px;height:80px;font-size:24px">Left</button>&nbsp;&nbsp;&nbsp;&nbsp;
     <button id="right" style="width:300px;height:80px;font-size:24px">Right</button><br><br>
     <button id="stop" style="width:620px;height:80px;font-size:24px">Stop</button><br><br>
-    <button id="cameraturnleft" style="width:300px;height:80px;font-size:24px">Camera Left</button>&nbsp;&nbsp;&nbsp;&nbsp;
-    <button id="cameraturnright" style="width:300px;height:80px;font-size:24px">Camera Right</button><br><br>
-    <button id="flashon" style="width:300px;height:80px;font-size:24px">Flash On</button>&nbsp;&nbsp;&nbsp;&nbsp;
-    <button id="flashoff" style="width:300px;height:80px;font-size:24px">Flash Off</button><br><br>
+    <button id="udleft" style="width:300px;height:80px;font-size:24px">UD Left</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="udright" style="width:300px;height:80px;font-size:24px">UD Right</button><br><br>
 </body>
 </html>
