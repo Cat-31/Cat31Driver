@@ -165,15 +165,13 @@ class MPU9250:
             self.mres = 4912.0/8190.0
         else: #  mfs == AK8963_BIT_16:
             self.mres = 4912.0/32760.0
-        
-        # CNTL1 set 0b0110 run well.  --Cat-31
-        bus.write_byte_data(AK8963_SLAVE_ADDRESS, AK8963_CNTL1, 0b0110)
+
+        bus.write_byte_data(AK8963_SLAVE_ADDRESS, AK8963_CNTL1, 0x00)
         time.sleep(0.01)
-       
-        ## Why ? delete these two lines and run well  --Cat-31.
+
         # set read FuseROM mode
-        #bus.write_byte_data(AK8963_SLAVE_ADDRESS, AK8963_CNTL1, 0x0F)
-        #time.sleep(0.01)
+        bus.write_byte_data(AK8963_SLAVE_ADDRESS, AK8963_CNTL1, 0x0F)
+        time.sleep(0.01)
 
         # read coef data
         data = bus.read_i2c_block_data(AK8963_SLAVE_ADDRESS, AK8963_ASAX, 3)
@@ -182,14 +180,13 @@ class MPU9250:
         self.magYcoef = (data[1] - 128) / 256.0 + 1.0
         self.magZcoef = (data[2] - 128) / 256.0 + 1.0
 
-        # Why ? delete these four lines and run well  --Cat-31.
         # set power down mode
-        # bus.write_byte_data(AK8963_SLAVE_ADDRESS, AK8963_CNTL1, 0x00)
-        # time.sleep(0.01)
+        bus.write_byte_data(AK8963_SLAVE_ADDRESS, AK8963_CNTL1, 0x00)
+        time.sleep(0.01)
 
         # set scale&continous mode
-        # bus.write_byte_data(AK8963_SLAVE_ADDRESS, AK8963_CNTL1, (mfs<<4|mode))
-        # time.sleep(0.01)
+        bus.write_byte_data(AK8963_SLAVE_ADDRESS, AK8963_CNTL1, (mfs<<4|mode))
+        time.sleep(0.01)
 
     ## brief Check data ready
     #  @param [in] self The object pointer.
